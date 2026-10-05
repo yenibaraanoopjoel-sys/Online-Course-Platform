@@ -37,8 +37,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     if (err != null && mounted) {
       AppHelpers.showSnackBar(context, err, isError: true);
+    } else if (mounted) {
+      if (auth.isAdmin) {
+        context.go(AppRoutes.adminDashboard);
+      } else {
+        context.go(AppRoutes.studentDashboard);
+      }
     }
-    // Navigation happens automatically via GoRouter's refreshListenable
   }
 
   @override
@@ -223,6 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           _emailCtrl.text = 'student@eduplatform.com';
                                           _passCtrl.text = 'student123';
                                           context.read<AuthService>().loginDemo('student');
+                                          context.go(AppRoutes.studentDashboard);
                                         },
                                       ),
                                     ),
@@ -239,10 +245,45 @@ class _LoginScreenState extends State<LoginScreen> {
                                           _emailCtrl.text = 'admin@eduplatform.com';
                                           _passCtrl.text = 'admin123';
                                           context.read<AuthService>().loginDemo('admin');
+                                          context.go(AppRoutes.adminDashboard);
                                         },
                                       ),
                                     ),
                                   ],
+                                ),
+                                const SizedBox(height: 12),
+                                InkWell(
+                                  onTap: () {
+                                    _emailCtrl.text = 'admin@eduplatform.com';
+                                    _passCtrl.text = 'admin123';
+                                    context.read<AuthService>().loginDemo('admin');
+                                    context.go(AppRoutes.adminDashboard);
+                                  },
+                                  child: const Text(
+                                    'Admin: admin@eduplatform.com / admin123',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: AppColors.textSecondary,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                InkWell(
+                                  onTap: () {
+                                    _emailCtrl.text = 'student@eduplatform.com';
+                                    _passCtrl.text = 'student123';
+                                    context.read<AuthService>().loginDemo('student');
+                                    context.go(AppRoutes.studentDashboard);
+                                  },
+                                  child: const Text(
+                                    'Student: student@eduplatform.com / student123',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: AppColors.textSecondary,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
