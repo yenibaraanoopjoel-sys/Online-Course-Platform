@@ -183,30 +183,67 @@ class _LoginScreenState extends State<LoginScreen> {
                             decoration: BoxDecoration(
                               color: AppColors.infoLight,
                               borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: AppColors.info.withOpacity(0.3)),
+                              border: Border.all(color: AppColors.info.withValues(alpha: 0.3)),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Row(
                                   children: [
-                                    Icon(Icons.info_outline, color: AppColors.info, size: 16),
+                                    Icon(Icons.bolt, color: AppColors.info, size: 18),
                                     SizedBox(width: 6),
                                     Text(
-                                      'Demo Accounts',
+                                      'Quick Demo Access',
                                       style: TextStyle(
                                         fontFamily: 'Inter',
                                         fontSize: 13,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w700,
                                         color: AppColors.info,
                                       ),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 8),
-                                _demoCredential('Admin', 'admin@eduplatform.com', 'admin123'),
-                                const SizedBox(height: 4),
-                                _demoCredential('Student', 'student@eduplatform.com', 'student123'),
+                                const Text(
+                                  'Click below to instantly sign in without typing:',
+                                  style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: OutlinedButton.icon(
+                                        icon: const Icon(Icons.school, size: 16),
+                                        label: const Text('Student Demo', style: TextStyle(fontSize: 12)),
+                                        style: OutlinedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          side: const BorderSide(color: AppColors.primary),
+                                        ),
+                                        onPressed: () {
+                                          _emailCtrl.text = 'student@eduplatform.com';
+                                          _passCtrl.text = 'student123';
+                                          context.read<AuthService>().loginDemo('student');
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: OutlinedButton.icon(
+                                        icon: const Icon(Icons.admin_panel_settings, size: 16),
+                                        label: const Text('Admin Demo', style: TextStyle(fontSize: 12)),
+                                        style: OutlinedButton.styleFrom(
+                                          padding: const EdgeInsets.symmetric(vertical: 10),
+                                          side: const BorderSide(color: AppColors.secondary),
+                                        ),
+                                        onPressed: () {
+                                          _emailCtrl.text = 'admin@eduplatform.com';
+                                          _passCtrl.text = 'admin123';
+                                          context.read<AuthService>().loginDemo('admin');
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
@@ -239,24 +276,6 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _demoCredential(String role, String email, String pass) {
-    return GestureDetector(
-      onTap: () {
-        _emailCtrl.text = email;
-        _passCtrl.text = pass;
-      },
-      child: Text(
-        '$role: $email / $pass',
-        style: const TextStyle(
-          fontFamily: 'Inter',
-          fontSize: 12,
-          color: AppColors.textSecondary,
-          decoration: TextDecoration.underline,
-        ),
       ),
     );
   }

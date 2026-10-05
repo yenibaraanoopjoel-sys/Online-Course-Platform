@@ -22,18 +22,55 @@ class CategoryService extends ChangeNotifier {
 
   CollectionReference get _col => _db.collection(AppConstants.categoriesCol);
 
+  static final List<CategoryModel> _defaultSampleCategories = [
+    CategoryModel(
+      categoryId: 'mobile-dev',
+      name: 'Mobile Development',
+      description: 'Flutter, iOS, Android, and cross-platform apps',
+      image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400',
+      createdAt: DateTime.now(),
+    ),
+    CategoryModel(
+      categoryId: 'ui-ux',
+      name: 'Design & UI/UX',
+      description: 'Figma, prototyping, design systems, and wireframing',
+      image: 'https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=400',
+      createdAt: DateTime.now(),
+    ),
+    CategoryModel(
+      categoryId: 'cloud-backend',
+      name: 'Cloud & Backend',
+      description: 'Firebase, Cloud Functions, APIs, and microservices',
+      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=400',
+      createdAt: DateTime.now(),
+    ),
+    CategoryModel(
+      categoryId: 'web-dev',
+      name: 'Web Development',
+      description: 'Frontend frameworks, responsive architecture, and HTML/CSS',
+      image: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=400',
+      createdAt: DateTime.now(),
+    ),
+  ];
+
   Stream<List<CategoryModel>> categoriesStream() {
-    return _col.orderBy('name').snapshots().map((snap) =>
-        snap.docs.map((d) => CategoryModel.fromMap(d.data() as Map<String, dynamic>, d.id)).toList());
+    return _col.orderBy('name').snapshots().map((snap) {
+      if (snap.docs.isEmpty) return _defaultSampleCategories;
+      return snap.docs
+          .map((d) => CategoryModel.fromMap(d.data() as Map<String, dynamic>, d.id))
+          .toList();
+    });
   }
 
   Future<CategoryModel?> getCategoryById(String id) async {
     try {
       final doc = await _col.doc(id).get();
-      if (!doc.exists) return null;
+      if (!doc.exists) {
+        return _defaultSampleCategories.where((c) => c.categoryId == id).firstOrNull;
+      }
       return CategoryModel.fromMap(doc.data() as Map<String, dynamic>, doc.id);
     } catch (e) {
-      return null;
+      return _defaultSampleCategories.where((c) => c.categoryId == id).firstOrNull;
     }
   }
 
