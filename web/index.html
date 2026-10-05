@@ -20,6 +20,28 @@
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="EduPlatform — A modern, full-stack online learning and course platform built with Flutter and Firebase.">
 
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
+  <script>
+    // Aggressively unregister any lingering service worker and purge caches
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var r of registrations) {
+          r.unregister();
+        }
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(function(keys) {
+        for (var key of keys) {
+          caches.delete(key);
+        }
+      });
+    }
+  </script>
+
   <!-- iOS meta tags & icons -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -33,16 +55,6 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <script>
-    // Ensure browsers always load the latest deployed build
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for (var r of registrations) {
-          r.unregister();
-        }
-      });
-    }
-  </script>
-  <script src="flutter_bootstrap.js" async></script>
+  <script src="flutter_bootstrap.js?v=3" async></script>
 </body>
 </html>
